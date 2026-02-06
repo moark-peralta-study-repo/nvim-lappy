@@ -1,0 +1,6 @@
+{
+    "diagnostics.globals": [
+        "root_dir",
+        "dap"
+    ]
+}
