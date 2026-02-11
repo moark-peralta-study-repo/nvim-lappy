@@ -86,30 +86,23 @@ return {
         on_attach = on_attach,
       })
 
-      -- === TypeScript LSP ===
-      opts.servers.tsserver = vim.tbl_deep_extend("force", opts.servers.tsserver or {}, {
-        capabilities = capabilities,
-        init_options = {
-          hostInfo = "neovim",
-          preferences = {
-            includeInlayParameterNameHints = "all",
-            includeInlayFunctionParameterTypeHints = true,
-            includeInlayVariableTypeHints = true,
+      -- === Typscript LSP ===
+      opts.servers.ts_ls = {
+        settings = {
+          typescript = {
+            inlayHints = {
+              inclueInlayParameterNameHints = "all",
+              inclueInlayParameterTypeHints = true,
+            },
+
+            updateImportsOnFileMove = { enabled = "always" },
+          },
+
+          completions = {
+            completeFunctionCalls = true,
           },
         },
-        settings = {
-          completions = { completeFunctionCalls = true },
-        },
-        root_dir = util.root_pattern("package.json", ".git"),
-        on_attach = on_attach,
-      })
-
-      opts.servers.tsserver = nil
-
-      -- Disable default tsserver setup if you plan to use a separate TypeScript plugin
-      opts.setup.tsserver = function(_, server_opts)
-        return false
-      end
+      }
 
       -- === TailwindCSS LSP ===
       opts.servers.tailwindcss = vim.tbl_deep_extend("force", opts.servers.tailwindcss or {}, {
