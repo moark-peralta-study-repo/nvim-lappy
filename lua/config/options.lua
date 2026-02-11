@@ -5,7 +5,7 @@ vim.opt.fileencoding = "utf-8"
 
 --Tmux shit test
 vim.opt.timeout = true
-vim.opt.timeoutlen = 500
+vim.opt.timeoutlen = 300
 vim.opt.ttimeout = true
 vim.opt.ttimeoutlen = 10
 

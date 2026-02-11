@@ -13,7 +13,6 @@ keymap.set("n", "-", "<C-a>")
 keymap.set("n", "<A-1>", function()
   require("neo-tree.command").execute({ toggle = true })
 end, { desc = "Toggle Neo-tree[root dir]" })
-
 -- Delete a word backwards
 keymap.set("n", "dw", "vb_d")
 
@@ -67,8 +66,10 @@ keymap.set("v", "<leader>c", "<ESC><cmd>lua require('Comment.api').toggle.linewi
 keymap.set("n", "<leader>xx", "<cmd>TroubleToggle<cr>")
 keymap.set("n", "<leader>xw", "<cmd>TroubleToggle workspace_diagnostics<cr>")
 keymap.set("n", "<leader>xd", "<cmd>TroubleToggle document_diagnostics<cr>")
-keymap.set("n", "<leader>xp", vim.diagnostic.goto_prev)
-keymap.set("n", "<leader>xn", vim.diagnostic.goto_next)
 
 -- Show Visual Lines
 keymap.set("n", ";e", vim.diagnostic.open_float, { desc = "Toggle full diagnostics" })
+
+-- Exit insert mode with jk or kj
+keymap.set("i", "jk", "<Esc>", { noremap = true })
+keymap.set("i", "kj", "<Esc>", { noremap = true })
