@@ -5,11 +5,7 @@ return {
       local capabilities = require("blink.cmp").get_lsp_capabilities()
       local util = require("lspconfig.util")
 
-      -- === on_attach: set LSP keymaps per buffer ===
       local on_attach = function(client, bufnr)
-        -- local opts = { buffer = bufnr, noremap = true, silent = true }
-
-        -- LSP actions
         vim.keymap.set("n", "<leader>cd", vim.lsp.buf.definition, { desc = "Go to Definition", buffer = bufnr })
         vim.keymap.set("n", "<leader>cr", vim.lsp.buf.references, { desc = "References", buffer = bufnr })
         vim.keymap.set("n", "<leader>ch", vim.lsp.buf.hover, { desc = "Hover Info", buffer = bufnr })
@@ -45,17 +41,31 @@ return {
         on_attach = on_attach,
       })
 
-      -- === Emmet HTML ===
+      opts.servers.eslint = vim.tbl_deep_extend("force", opts.servers.eslint or {}, {
+        capabilities = capabilities,
+        on_attach = function(client, bufnr)
+          on_attach(client, bufnr)
+
+          vim.api.nvim_create_autocmd("BufWritePre", {
+            buffer = bufnr,
+            callback = function()
+              if vim.lsp.get_clients({ bufnr = bufnr, name = "eslint" })[1] then
+                vim.cmd("EslintFixAll")
+              end
+            end,
+          })
+        end,
+        settings = {
+          workingDirectory = { mode = "location" },
+        },
+      })
+
       opts.servers.emmet_ls = {
         capabilities = capabilities,
         filetypes = {
           "html",
           "css",
           "scss",
-          "javascript",
-          "javascriptreact",
-          "typescript",
-          "typescriptreact",
           "vue",
           "svelte",
         },
@@ -71,7 +81,6 @@ return {
         on_attach = on_attach,
       }
 
-      -- === Lua LSP ===
       opts.servers.lua_ls = vim.tbl_deep_extend("force", opts.servers.lua_ls or {}, {
         capabilities = capabilities,
         settings = {
@@ -86,16 +95,37 @@ return {
         on_attach = on_attach,
       })
 
-      -- === Typscript LSP ===
       opts.servers.ts_ls = {
+        capabilities = capabilities,
+        on_attach = on_attach,
+        filetypes = {
+          "javascript",
+          "javascriptreact",
+          "typescript",
+          "typescriptreact",
+        },
         settings = {
           typescript = {
-            inlayHints = {
-              inclueInlayParameterNameHints = "all",
-              inclueInlayParameterTypeHints = true,
+            preferences = {
+              includePackageJsonAutoImports = "on",
+              importModuleSpecifierPreference = "relative",
+              importModuleSpecifierEnding = "auto",
+              quotePreference = "double",
             },
-
+            inlayHints = {
+              includeInlayParameterNameHints = "all",
+              includeInlayParameterTypeHints = true,
+            },
             updateImportsOnFileMove = { enabled = "always" },
+          },
+
+          javascript = {
+            preferences = {
+              includePackageJsonAutoImports = "on",
+              importModuleSpecifierPreference = "relative",
+              importModuleSpecifierEnding = "auto",
+              quotePreference = "double",
+            },
           },
 
           completions = {
@@ -104,7 +134,6 @@ return {
         },
       }
 
-      -- === TailwindCSS LSP ===
       opts.servers.tailwindcss = vim.tbl_deep_extend("force", opts.servers.tailwindcss or {}, {
         capabilities = capabilities,
         root_dir = util.root_pattern(
@@ -165,7 +194,6 @@ return {
         hover = { max_width = 80 },
       })
 
-      -- Keymaps like IntelliJ
       vim.keymap.set("n", "<A-CR>", "<cmd>Lspsaga code_action<CR>", { silent = true, desc = "Code Action (Alt+Enter)" })
       vim.keymap.set("v", "<A-CR>", "<cmd>Lspsaga range_code_action<CR>", { silent = true })
       vim.keymap.set("n", "K", "<cmd>Lspsaga hover_doc<CR>", { silent = true, desc = "Hover Docs" })
