@@ -30,7 +30,23 @@ return {
         vim.keymap.set("n", "<leader>dl", vim.diagnostic.setloclist, { desc = "Diagnostics List", buffer = bufnr })
       end
 
-      -- === CSS LSP ===
+      opts.servers.basedpyright = {
+        capabilities = capabilities,
+
+        settings = {
+          basedpyright = {
+            analysis = {
+              typeCheckingMode = "strict", -- off | basic | strict
+              autoSearchPaths = true,
+              useLibraryCodeForTypes = true,
+              diagnosticMode = "workspace",
+            },
+          },
+        },
+      }
+
+      opts.servers.racket_langserver = {}
+
       opts.servers.cssls = vim.tbl_deep_extend("force", opts.servers.cssls or {}, {
         capabilities = capabilities,
         settings = {
