@@ -73,3 +73,6 @@ keymap.set("n", ";e", vim.diagnostic.open_float, { desc = "Toggle full diagnosti
 -- Exit insert mode with jk or kj
 keymap.set("i", "jk", "<Esc>", { noremap = true })
 keymap.set("i", "kj", "<Esc>", { noremap = true })
+
+-- Delete default keymaps
+-- keymap.del({ "n", "v" }, "<leader>aa")
