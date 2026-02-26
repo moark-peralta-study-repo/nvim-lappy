@@ -12,6 +12,18 @@ return {
       },
     },
   },
+
+  config = function(_, opts)
+    require("flash").setup(opts)
+
+    vim.api.nvim_set_hl(0, "FlashLabel", {
+      fg = "#ffffff",
+      bg = "#ff007c",
+      bold = true,
+      nocombine = true,
+    })
+  end,
+
   -- stylua: ignore
   keys = {
     { "<Leader>j", mode = { "n", "x", "o" }, function() require("flash").jump() end, desc = "Flash" },
