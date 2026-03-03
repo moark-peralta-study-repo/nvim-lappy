@@ -12,3 +12,15 @@ vim.api.nvim_create_autocmd("BufAdd", {
     end
   end,
 })
+
+vim.api.nvim_create_autocmd("FileType", {
+  pattern = "qf",
+  callback = function()
+    local title = vim.fn.getqflist({ title = 0 }).title
+    if title == "jdtls" then
+      vim.schedule(function()
+        vim.cmd("cclose")
+      end)
+    end
+  end,
+})
