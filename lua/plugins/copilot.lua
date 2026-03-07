@@ -29,12 +29,20 @@ return {
     opts = {
       debug = false,
     },
+
+    config = function(_, opts)
+      require("CopilotChat").setup(opts)
+
+      pcall(vim.keymap.del, "n", "<leader>aa")
+      vim.keymap.set("n", "<leader>aa", "gg<S-v>G", { desc = "Select all" })
+    end,
+
     keys = {
-      { ";cp", "<cmd>CopilotChat<cr>", desc = "Copilot Chat" },
-      { "<leader>ce", "<cmd>CopilotChatExplain<cr>", desc = "Explain code" },
-      { "<leader>ct", "<cmd>CopilotChatTests<cr>", desc = "Generate tests" },
-      { "<leader>cr", "<cmd>CopilotChatReview<cr>", desc = "Review code" },
-      { "<leader>cf", "<cmd>CopilotChatFix<cr>", desc = "Fix code" },
+      { ";aa", "<cmd>CopilotChat<cr>", desc = "Copilot Chat" },
+      { ";ce", "<cmd>CopilotChatExplain<cr>", desc = "Explain code" },
+      { ";ct", "<cmd>CopilotChatTests<cr>", desc = "Generate tests" },
+      { ";cr", "<cmd>CopilotChatReview<cr>", desc = "Review code" },
+      { ";cf", "<cmd>CopilotChatFix<cr>", desc = "Fix code" },
     },
   },
 }

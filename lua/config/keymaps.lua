@@ -17,7 +17,7 @@ end, { desc = "Toggle Neo-tree[root dir]" })
 keymap.set("n", "dw", "vb_d")
 
 -- Select all
-keymap.set("n", "<leader>aa", "gg<S-v>G")
+-- keymap.set("n", "<leader>a", "gg<S-v>G")
 
 -- Jumplist
 keymap.set("n", "te", "tabedit", opts)
@@ -73,6 +73,3 @@ keymap.set("n", ";e", vim.diagnostic.open_float, { desc = "Toggle full diagnosti
 -- Exit insert mode with jk or kj
 keymap.set("i", "jk", "<Esc>", { noremap = true })
 keymap.set("i", "kj", "<Esc>", { noremap = true })
-
--- Delete default keymaps
--- keymap.del({ "n", "v" }, "<leader>aa")
