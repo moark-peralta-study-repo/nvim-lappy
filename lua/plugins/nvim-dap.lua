@@ -1,35 +1,57 @@
 return {
-  "mfussenegger/nvim-dap",
-  dependencies = {
-    "rcarriga/nvim-dap-ui",
-    "nvim-neotest/nvim-nio",
+  {
+    "mfussenegger/nvim-dap",
+    config = function()
+      local dap = require("dap")
+      local keymap = vim.keymap
+      local opts = { noremap = true, silent = true }
+
+      -- Start / Continue
+      keymap.set("n", "<F5>", dap.continue, { desc = "Debug Continue" })
+
+      -- Step
+      keymap.set("n", "<F10>", dap.step_over, { desc = "Step Over" })
+      keymap.set("n", "<F11>", dap.step_into, { desc = "Step Into" })
+      keymap.set("n", "<F12>", dap.step_out, { desc = "Step Out" })
+
+      -- Breakpoints
+      keymap.set("n", "<leader>db", dap.toggle_breakpoint, { desc = "Toggle Breakpoint" })
+      keymap.set("n", "<leader>dB", function()
+        dap.set_breakpoint(vim.fn.input("Breakpoint condition: "))
+      end, { desc = "Conditional Breakpoint" })
+
+      -- Debug actions
+      keymap.set("n", "<leader>dr", dap.repl.toggle, { desc = "Toggle REPL" })
+      keymap.set("n", "<leader>dl", dap.run_last, { desc = "Run Last Debug" })
+      keymap.set("n", "<leader>dt", dap.terminate, { desc = "Terminate Debug" })
+    end,
   },
 
-  config = function()
-    local dap = require("dap")
-    local dapui = require("dapui")
-    local keymap = vim.keymap
+  {
+    "igorlfs/nvim-dap-view",
+    lazy = false,
+    opts = {},
+    config = function()
+      local keymap = vim.keymap
+      local opts = { noremap = true, silent = true }
 
-    dapui.setup()
+      -- UI
+      keymap.set("n", "<leader>dv", "<cmd>DapViewToggle<CR>", opts)
+      keymap.set("n", "<leader>do", "<cmd>DapViewOpen<CR>", opts)
+      keymap.set("n", "<leader>dc", "<cmd>DapViewClose<CR>", opts)
 
-    -- Automatically open and close the DAP UI
-    dap.listeners.after.event_initialized["dapui_config"] = function()
-      dapui.open()
-    end
-    dap.listeners.before.event_terminated["dapui_config"] = function()
-      dapui.close()
-    end
-    dap.listeners.before.event_exited["dapui_config"] = function()
-      dapui.close()
-    end
+      -- Sections
+      keymap.set("n", "<leader>ds", "<cmd>DapViewSwitch scopes<CR>", opts)
+      keymap.set("n", "<leader>dB", "<cmd>DapViewSwitch breakpoints<CR>", opts)
+      keymap.set("n", "<leader>dW", "<cmd>DapViewSwitch watches<CR>", opts)
+      keymap.set("n", "<leader>dT", "<cmd>DapViewSwitch threads<CR>", opts)
+      keymap.set("n", "<leader>dR", "<cmd>DapViewSwitch repl<CR>", opts)
+      keymap.set("n", "<leader>dE", "<cmd>DapViewSwitch exceptions<CR>", opts)
 
-    -- Keymaps
-    keymap.set("n", "<leader>dt", dap.toggle_breakpoint, { desc = "Debug Toggle Breakpoint" })
-    keymap.set("n", "<leader>ds", dap.continue, { desc = "Debug Start" })
-    keymap.set("n", "<leader>dx", function()
-      dap.terminate()
-      dapui.close()
-    end, { desc = "Debug Stop & Close UI" })
-    keymap.set("n", "<leader>du", dapui.toggle, { desc = "Toggle Debug UI" })
-  end,
+      -- Watch expressions
+      keymap.set("n", "<leader>da", "<cmd>DapViewAddExpr<CR>", opts)
+      keymap.set("n", "<leader>dx", "<cmd>DapViewDelete<CR>", opts)
+      keymap.set("n", "<leader>de", "<cmd>DapViewEval<CR>", opts)
+    end,
+  },
 }
