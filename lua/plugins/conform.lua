@@ -15,6 +15,7 @@ return {
 
   opts = {
     formatters_by_ft = {
+      sql = { "sql_formatter" },
       lua = { "stylua" },
       javascript = { "biome" },
       typescript = { "biome" },
@@ -29,6 +30,9 @@ return {
     },
 
     formatters = {
+      sql_formatter = {
+        prepend_args = { "--language", "postgresql" },
+      },
       stylua = {
         command = "stylua",
         args = {

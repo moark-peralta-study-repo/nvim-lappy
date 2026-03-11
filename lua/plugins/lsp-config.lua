@@ -30,6 +30,12 @@ return {
         vim.keymap.set("n", "<leader>dl", vim.diagnostic.setloclist, { desc = "Diagnostics List", buffer = bufnr })
       end
 
+      opts.servers.postgres_lsp = {
+        capabilities = capabilities,
+        on_attach = on_attach,
+        filetypes = { "sql", "psql" },
+      }
+
       opts.servers.basedpyright = {
         capabilities = capabilities,
 
@@ -152,27 +158,15 @@ return {
 
       opts.servers.tailwindcss = vim.tbl_deep_extend("force", opts.servers.tailwindcss or {}, {
         capabilities = capabilities,
-        root_dir = util.root_pattern(
-          "tailwind.config.cjs",
-          "tailwind.config.js",
-          "tailwind.config.ts",
-          "postcss.config.js",
-          "package.json",
-          ".git"
-        ),
-        settings = {
-          tailwindCSS = {
-            validate = true,
-            experimental = {
-              classRegex = {
-                "clsx\\(([^)]*)\\)",
-                "cva\\(([^)]*)\\)",
-                "tw`([^`]*)`",
-              },
-            },
-          },
-        },
         on_attach = on_attach,
+        filetypes = {
+          "html",
+          "css",
+          "typescript",
+          "typescriptreact",
+          "javascript",
+          "javascriptreact",
+        },
       })
 
       vim.g.get_lsp_capabilities = capabilities
