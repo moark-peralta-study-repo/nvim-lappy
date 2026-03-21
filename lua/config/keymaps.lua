@@ -17,7 +17,7 @@ end, { desc = "Toggle Neo-tree[root dir]" })
 keymap.set("n", "dw", "vb_d")
 
 -- Select all
--- keymap.set("n", "<leader>a", "gg<S-v>G")
+keymap.set("n", "<leader>a", "gg<S-v>G")
 
 -- Jumplist
 keymap.set("n", "te", "tabedit", opts)
