@@ -189,6 +189,7 @@ return {
 
   {
     "mfussenegger/nvim-jdtls",
+    ft = "java",
   },
   {
     "glepnir/lspsaga.nvim",

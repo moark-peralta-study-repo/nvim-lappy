@@ -207,6 +207,7 @@ function M.setup_jdtls()
 
     require("dap")
 
+    ---@diagnostic disable-next-line: missing-fields
     require("jdtls.dap").setup_dap({ hotcodereplace = "auto" })
     require("jdtls.dap").setup_dap_main_class_configs()
 
@@ -218,7 +219,8 @@ function M.setup_jdtls()
       -- pattern = { "*.java" },
       buffer = bufnr,
       callback = function()
-        vim.lsp.codelens.refresh({ bufnr = bufnr })
+        -- vim.lsp.codelens.refresh({ bufnr = bufnr })
+        vim.lsp.codelens.enable(true)
       end,
     })
   end
