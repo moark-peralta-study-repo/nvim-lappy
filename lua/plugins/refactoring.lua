@@ -2,83 +2,147 @@ return {
   "ThePrimeagen/refactoring.nvim",
   dependencies = {
     "nvim-lua/plenary.nvim",
-    "nvim-treesitter/nvim-treesitter",
-    "nvim-telescope/telescope.nvim",
-    "glepnir/lspsaga.nvim", -- using Lspsaga for rename
+    "glepnir/lspsaga.nvim",
+    "lewis6991/async.nvim",
   },
   config = function()
     local refactoring = require("refactoring")
-    local telescope = require("telescope")
     local pickers = require("telescope.pickers")
     local finders = require("telescope.finders")
     local actions = require("telescope.actions")
     local action_state = require("telescope.actions.state")
     local conf = require("telescope.config").values
 
-    -- Setup refactoring.nvim
     refactoring.setup({})
 
-    -- Load telescope extension
-    telescope.load_extension("refactoring")
+    local function open_refactor_picker()
+      local refactor_actions = {
+        {
+          name = "Extract Function",
+          action = function()
+            refactoring.refactor("Extract Function")
+          end,
+        },
+        {
+          name = "Extract Function To File",
+          action = function()
+            refactoring.refactor("Extract Function To File")
+          end,
+        },
+        {
+          name = "Extract Variable",
+          action = function()
+            refactoring.refactor("Extract Variable")
+          end,
+        },
+        {
+          name = "Inline Variable",
+          action = function()
+            refactoring.refactor("Inline Variable")
+          end,
+        },
+      }
 
-    ----------------------------------------------------------------
-    -- Refactor Menu (visual mode)
-    ----------------------------------------------------------------
-    vim.keymap.set("v", "<leader>r", function()
-      telescope.extensions.refactoring.refactors()
-    end, { desc = "Refactor Menu" })
+      pickers
+        .new({}, {
+          prompt_title = "Refactor",
+          finder = finders.new_table({
+            results = vim.tbl_map(function(item)
+              return item.name
+            end, refactor_actions),
+          }),
+          sorter = conf.generic_sorter({}),
+          attach_mappings = function(_, map)
+            local run_selection = function(bufnr)
+              local selection = action_state.get_selected_entry()
+              actions.close(bufnr)
+
+              if not selection then
+                return
+              end
+
+              for _, item in ipairs(refactor_actions) do
+                if item.name == selection[1] then
+                  item.action()
+                  return
+                end
+              end
+            end
+
+            map("i", "<CR>", run_selection)
+            map("n", "<CR>", run_selection)
+            return true
+          end,
+        })
+        :find()
+    end
+
+    vim.keymap.set("v", "<leader>r", open_refactor_picker, { desc = "Refactor Menu" })
 
     vim.keymap.set("n", "<A-CR>", "<Cmd>Lspsaga code_action<CR>", { desc = "Lspsaga Actions" })
 
-    ----------------------------------------------------------------
-    -- Refactor / Rename Menu (normal mode)
-    ----------------------------------------------------------------
     vim.keymap.set("n", "<leader>r", function()
       local custom_actions = {
         {
           name = "Rename Symbol",
           action = function()
-            vim.cmd("Lspsaga rename") -- ✅ use Lspsaga rename
+            vim.cmd("Lspsaga rename")
+          end,
+        },
+        {
+          name = "Extract Function",
+          action = function()
+            refactoring.refactor("Extract Function")
+          end,
+        },
+        {
+          name = "Extract Function To File",
+          action = function()
+            refactoring.refactor("Extract Function To File")
+          end,
+        },
+        {
+          name = "Extract Variable",
+          action = function()
+            refactoring.refactor("Extract Variable")
+          end,
+        },
+        {
+          name = "Inline Variable",
+          action = function()
+            refactoring.refactor("Inline Variable")
           end,
         },
       }
-      -- Combine with refactoring.nvim actions
-      local refactor_actions = {
-        "Extract Function",
-        "Extract Function To File",
-        "Extract Variable",
-        "Inline Variable",
-      }
-
-      for _, name in ipairs(refactor_actions) do
-        table.insert(custom_actions, {
-          name = name,
-          action = function()
-            refactoring.refactor(name)
-          end,
-        })
-      end
 
       pickers
         .new({}, {
-          prompt_title = "Refactor / Rename",
+          prompt_title = "Rename / Refactor",
           finder = finders.new_table({
-            results = vim.tbl_map(function(x)
-              return x.name
+            results = vim.tbl_map(function(item)
+              return item.name
             end, custom_actions),
           }),
           sorter = conf.generic_sorter({}),
           attach_mappings = function(_, map)
-            map("i", "<CR>", function(bufnr)
-              local selection = action_state.get_selected_entry(bufnr)
+            local run_selection = function(bufnr)
+              local selection = action_state.get_selected_entry()
               actions.close(bufnr)
 
-              for _, a in ipairs(custom_actions) do
-                if a.name == selection[1] then
-                  a.action()
+              if not selection then
+                return
+              end
+
+              for _, item in ipairs(custom_actions) do
+                if item.name == selection[1] then
+                  item.action()
+                  return
                 end
               end
-            end)
+            end
+
+            map("i", "<CR>", run_selection)
+            map("n", "<CR>", run_selection)
             return true
           end,
         })
