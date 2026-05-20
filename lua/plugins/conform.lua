@@ -27,6 +27,7 @@ return {
       css = { "biome" },
       java = { "google_java_format" },
       racket = { "raco_fmt" },
+      c = { "clang-format" },
     },
 
     formatters = {

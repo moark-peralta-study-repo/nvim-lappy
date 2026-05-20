@@ -56,7 +56,12 @@ return {
       opts.servers.cssls = vim.tbl_deep_extend("force", opts.servers.cssls or {}, {
         capabilities = capabilities,
         settings = {
-          css = { validate = true },
+          css = {
+            validate = true,
+            lint = {
+              unknownAtRules = "ignore",
+            },
+          },
           scss = { validate = true },
           less = { validate = true },
         },
@@ -166,6 +171,15 @@ return {
           "typescriptreact",
           "javascript",
           "javascriptreact",
+        },
+      })
+
+      opts.servers.clangd = vim.tbl_deep_extend("force", opts.servers.clang or {}, {
+        capabilities = capabilities,
+        on_attach = on_attach,
+        filtetypes = {
+          "c",
+          "cpp",
         },
       })
 
