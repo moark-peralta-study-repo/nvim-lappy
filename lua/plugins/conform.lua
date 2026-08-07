@@ -25,9 +25,9 @@ return {
       json = { "biome" },
       jsonc = { "biome" },
       css = { "biome" },
-      java = { "google_java_format" },
+      java = { "google-java-format" },
       racket = { "raco_fmt" },
-      c = { "clang-format" },
+      -- c = { "clang-format" },
     },
 
     formatters = {
