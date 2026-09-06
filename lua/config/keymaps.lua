@@ -57,9 +57,10 @@ keymap.set("n", "<A-j>", ":m .+1<CR>==", opts)
 keymap.set("n", "<A-k>", ":m .-2<CR>==", opts)
 
 --Comments
-keymap.set("n", "<leader>c", function()
-  require("Comment.api").toggle.linewise.current()
-end)
+-- keymap.set("n", "<leader>c", function()
+--   require("Comment.api").toggle.linewise.current()
+-- end)
+
 keymap.set("v", "<leader>c", "<ESC><cmd>lua require('Comment.api').toggle.linewise(vim.fn.visualmode())<CR>")
 
 -- Trouble.nvim for diagnostics (errors)
@@ -73,3 +74,7 @@ keymap.set("n", ";e", vim.diagnostic.open_float, { desc = "Toggle full diagnosti
 -- Exit insert mode with jk or kj
 keymap.set("i", "jk", "<Esc>", { noremap = true })
 keymap.set("i", "kj", "<Esc>", { noremap = true })
+
+keymap.set("n", "<A-1>", function()
+  require("neo-tree.command").execute({ toggle = true })
+end, { desc = "Toggle Neo-tree[root dir]" })
