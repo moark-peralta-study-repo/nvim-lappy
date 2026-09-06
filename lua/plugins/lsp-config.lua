@@ -28,6 +28,12 @@ return {
           vim.diagnostic.jump({ count = 1 })
         end, { desc = "Next Diagnostic", buffer = bufnr })
         vim.keymap.set("n", "<leader>dl", vim.diagnostic.setloclist, { desc = "Diagnostics List", buffer = bufnr })
+
+        -- C lang
+        if client.name == "clangd" then
+          client.server_capabilities.documentFormattingProvider = false
+          client.server_capabilities.documentRangeFormattingProvider = false
+        end
       end
 
       opts.servers.postgres_lsp = {
@@ -35,6 +41,9 @@ return {
         on_attach = on_attach,
         filetypes = { "sql", "psql" },
       }
+
+      -- Rust
+      --
 
       opts.servers.basedpyright = {
         capabilities = capabilities,
@@ -46,6 +55,25 @@ return {
               autoSearchPaths = true,
               useLibraryCodeForTypes = true,
               diagnosticMode = "workspace",
+            },
+          },
+        },
+      }
+
+      opts.servers.rust_analyzer = {
+        capabilities = capabilities,
+        on_attach = on_attach,
+
+        settings = {
+          ["rust-analyzer"] = {
+            cargo = {
+              allFeatures = true,
+            },
+            check = {
+              command = "clippy",
+            },
+            procMacro = {
+              enable = true,
             },
           },
         },
@@ -68,25 +96,25 @@ return {
         on_attach = on_attach,
       })
 
-      opts.servers.eslint = vim.tbl_deep_extend("force", opts.servers.eslint or {}, {
-        capabilities = capabilities,
-        on_attach = function(client, bufnr)
-          on_attach(client, bufnr)
-
-          vim.api.nvim_create_autocmd("BufWritePre", {
-            buffer = bufnr,
-            callback = function()
-              if vim.lsp.get_clients({ bufnr = bufnr, name = "eslint" })[1] then
-                vim.cmd("EslintFixAll")
-              end
-            end,
-          })
-        end,
-        settings = {
-          workingDirectory = { mode = "location" },
-        },
-      })
-
+      -- opts.servers.eslint = vim.tbl_deep_extend("force", opts.servers.eslint or {}, {
+      --   capabilities = capabilities,
+      --   on_attach = function(client, bufnr)
+      --     on_attach(client, bufnr)
+      --
+      --     vim.api.nvim_create_autocmd("BufWritePre", {
+      --       buffer = bufnr,
+      --       callback = function()
+      --         if vim.lsp.get_clients({ bufnr = bufnr, name = "eslint" })[1] then
+      --           vim.cmd("EslintFixAll")
+      --         end
+      --       end,
+      --     })
+      --   end,
+      --   settings = {
+      --     workingDirectory = { mode = "location" },
+      --   },
+      -- })
+      --
       opts.servers.emmet_ls = {
         capabilities = capabilities,
         filetypes = {
@@ -177,7 +205,7 @@ return {
       opts.servers.clangd = vim.tbl_deep_extend("force", opts.servers.clang or {}, {
         capabilities = capabilities,
         on_attach = on_attach,
-        filtetypes = {
+        filetypes = {
           "c",
           "cpp",
         },
