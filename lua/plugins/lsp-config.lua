@@ -3,7 +3,6 @@ return {
     "neovim/nvim-lspconfig",
     opts = function(_, opts)
       local capabilities = require("blink.cmp").get_lsp_capabilities()
-      local util = require("lspconfig.util")
 
       local on_attach = function(client, bufnr)
         vim.keymap.set("n", "<leader>cd", vim.lsp.buf.definition, { desc = "Go to Definition", buffer = bufnr })
@@ -42,9 +41,6 @@ return {
         filetypes = { "sql", "psql" },
       }
 
-      -- Rust
-      --
-
       opts.servers.basedpyright = {
         capabilities = capabilities,
 
@@ -63,7 +59,6 @@ return {
       opts.servers.rust_analyzer = {
         capabilities = capabilities,
         on_attach = on_attach,
-
         settings = {
           ["rust-analyzer"] = {
             cargo = {
@@ -71,9 +66,6 @@ return {
             },
             check = {
               command = "clippy",
-            },
-            procMacro = {
-              enable = true,
             },
           },
         },
