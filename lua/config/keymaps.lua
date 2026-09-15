@@ -57,9 +57,9 @@ keymap.set("n", "<A-j>", ":m .+1<CR>==", opts)
 keymap.set("n", "<A-k>", ":m .-2<CR>==", opts)
 
 --Comments
--- keymap.set("n", "<leader>c", function()
---   require("Comment.api").toggle.linewise.current()
--- end)
+keymap.set("n", "<leader>c", function()
+  require("Comment.api").toggle.linewise.current()
+end, { desc = "Toggle line comment" })
 
 keymap.set("v", "<leader>c", "<ESC><cmd>lua require('Comment.api').toggle.linewise(vim.fn.visualmode())<CR>")
 
