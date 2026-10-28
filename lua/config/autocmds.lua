@@ -1,3 +1,5 @@
+require("config.italics")
+
 vim.api.nvim_create_autocmd("BufAdd", {
   callback = function(args)
     local buf = args.buf
@@ -19,7 +21,7 @@ vim.api.nvim_create_autocmd("FileType", {
     local title = vim.fn.getqflist({ title = 0 }).title
     if title == "jdtls" then
       vim.schedule(function()
-        vim.cmd("cclose")
+        vim.cmd("close")
       end)
     end
   end,
