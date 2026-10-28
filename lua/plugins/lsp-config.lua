@@ -56,21 +56,21 @@ return {
         },
       }
 
-      opts.servers.rust_analyzer = {
-        capabilities = capabilities,
-        on_attach = on_attach,
-        settings = {
-          ["rust-analyzer"] = {
-            cargo = {
-              allFeatures = true,
-            },
-            check = {
-              command = "clippy",
-            },
-          },
-        },
-      }
-
+      -- opts.servers.rust_analyzer = {
+      --   -- capabilities = capabilities,
+      --   -- on_attach = on_attach,
+      --   settings = {
+      --     ["rust-analyzer"] = {
+      --       cargo = {
+      --         allFeatures = true,
+      --       },
+      --       check = {
+      --         command = "clippy",
+      --       },
+      --     },
+      --   },
+      -- }
+      --
       opts.servers.racket_langserver = {}
 
       opts.servers.cssls = vim.tbl_deep_extend("force", opts.servers.cssls or {}, {
