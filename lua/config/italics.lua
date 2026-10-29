@@ -7,6 +7,7 @@ local function set_italics()
     "@keyword.return",
     "@keyword.exception",
     "@keyword.function",
+    "@variable.member.rust",
   }
 
   for _, group in ipairs(groups) do

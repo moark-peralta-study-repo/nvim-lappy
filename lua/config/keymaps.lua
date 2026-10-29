@@ -64,9 +64,9 @@ end, { desc = "Toggle line comment" })
 keymap.set("v", "<leader>c", "<ESC><cmd>lua require('Comment.api').toggle.linewise(vim.fn.visualmode())<CR>")
 
 -- Trouble.nvim for diagnostics (errors)
-keymap.set("n", "<leader>xx", "<cmd>TroubleToggle<cr>")
-keymap.set("n", "<leader>xw", "<cmd>TroubleToggle workspace_diagnostics<cr>")
-keymap.set("n", "<leader>xd", "<cmd>TroubleToggle document_diagnostics<cr>")
+keymap.set("n", "<leader>xx", "<cmd>Trouble diagnostics toggle<cr>", { desc = "Diagnostics (Trouble)" })
+keymap.set("n", "<leader>xd", "<cmd>Trouble diagnostics toggle filter.buf=0<cr>", { desc = "Buffer diagnostics (Trouble)" })
+keymap.set("n", "<leader>xq", "<cmd>Trouble qflist toggle<cr>", { desc = "Quickfix list (Trouble)" })
 
 -- Show Visual Lines
 keymap.set("n", ";e", vim.diagnostic.open_float, { desc = "Toggle full diagnostics" })
